@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+touch save.txt
+./binary $(cat save.txt) > save.txt
