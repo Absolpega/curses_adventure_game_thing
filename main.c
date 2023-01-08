@@ -12,6 +12,8 @@
 
 #include "save.h"
 
+#include "enemy.h"
+
 void end_game(const char *message, bool error) {
 	endwin();
 
@@ -46,6 +48,7 @@ int main(int argc, char *argv[]) {
 
 	while(true) {
 		map_camera_draw();
+		enemy_turn();
 		player_update();
 	}
 

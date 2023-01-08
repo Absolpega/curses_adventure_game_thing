@@ -5,6 +5,8 @@
 
 #include "main.h"
 
+#include "draw.h"
+
 #include "map.h"
 
 int player_y = 0;
@@ -66,12 +68,20 @@ void keyhandle() {
 void player_draw(int y, int x) {
 	player_window = newwin(1,2, y, x);
 
-	wattron(player_window, COLOR_PAIR(MAP_TILE_PLAYER_PAIR));
+	//wattron(player_window, COLOR_PAIR(MAP_TILE_PLAYER_PAIR));
+	//mvwaddch(player_window, 0, 0, MAP_TILE_PLAYER_CHARACTER);
+	//mvwaddch(player_window, 0, 1, MAP_TILE_PLAYER_CHARACTER);
+	//wattroff(player_window, COLOR_PAIR(MAP_TILE_PLAYER_PAIR));
+	
+	// much cleaner
+	window_rectangle_draw(
+			player_window,
+			0,0,
+			1,2,
+			MAP_TILE_PLAYER_CHARACTER,
+			MAP_TILE_PLAYER_PAIR
+			);
 
-	mvwaddch(player_window, 0, 0, MAP_TILE_PLAYER_CHARACTER);
-	mvwaddch(player_window, 0, 1, MAP_TILE_PLAYER_CHARACTER);
-
-	wattroff(player_window, COLOR_PAIR(MAP_TILE_PLAYER_PAIR));
 	wnoutrefresh (player_window);
 }
 

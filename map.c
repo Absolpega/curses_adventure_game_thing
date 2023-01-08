@@ -62,10 +62,12 @@ void map_camera_draw() {
 
 void map_init() {
 	map_window = newpad(MAP_HEIGHT, MAP_WIDTH);
+
 	map_color_generate(MAP_TILE_PLAYER);
 	map_color_generate(MAP_TILE_GRASS);
 	map_color_generate(MAP_TILE_WATER);
 	map_color_generate(MAP_TILE_MOUNTAIN);
+	map_color_generate(MAP_TILE_ENEMY);
 }
 
 
