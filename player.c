@@ -12,8 +12,7 @@
 int player_y = 0;
 int player_x = 0;
 
-int player_last_x = 0;
-int player_last_y = 0;
+int player_health = 10;
 
 WINDOW *player_window;
 WINDOW *debug_window;
@@ -35,6 +34,7 @@ void keyhandle() {
 	int going_to_be;
 	switch(default_keyhandle()) {
 		case 'w':
+		case KEY_UP:
 			going_to_be = player_y - PLAYER_STEP_Y;
 			if(going_to_be < 0 || map_cant_move(going_to_be, player_x) || map_cant_move(going_to_be, player_x+1)) {
 				break;
@@ -42,6 +42,7 @@ void keyhandle() {
 			player_y = going_to_be;
 			break;
 		case 's':
+		case KEY_DOWN:
 			going_to_be = player_y + PLAYER_STEP_Y;
 			if(going_to_be > MAP_HEIGHT || map_cant_move(going_to_be, player_x) || map_cant_move(going_to_be, player_x+1)) {
 				break;
@@ -49,6 +50,7 @@ void keyhandle() {
 			player_y = going_to_be;
 			break;
 		case 'a':
+		case KEY_LEFT:
 			going_to_be = player_x - PLAYER_STEP_X;
 			if(going_to_be < 0 || map_cant_move(player_y, going_to_be)) {
 				break;
@@ -56,12 +58,26 @@ void keyhandle() {
 			player_x = going_to_be;
 			break;
 		case 'd':
+		case KEY_RIGHT:
 			going_to_be = player_x + PLAYER_STEP_X;
 			if(going_to_be > MAP_WIDTH || map_cant_move(player_y, going_to_be)) {
 				break;
 			}
 			player_x = going_to_be;
 			break;
+
+
+		case 'h':
+			if(player_health >= 10){
+				//player_health = 10;
+				keyhandle();
+				break;
+			}
+			player_health += 1;
+			break;
+
+		default:
+			keyhandle();
 	}
 }
 
@@ -109,6 +125,7 @@ void player_debug_draw() {
 	mvwprintw(debug_window, 1,0, "%i", player_y);
 	mvwprintw(debug_window, 3,0, "%i", screen_width);
 	mvwprintw(debug_window, 4,0, "%i", screen_height);
+	mvwprintw(debug_window, 6,0, "%i", player_health);
 	wnoutrefresh(debug_window);
 }
 

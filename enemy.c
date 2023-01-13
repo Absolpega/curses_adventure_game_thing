@@ -56,31 +56,60 @@ void enemy_camera_draw(int i) {
 bool enemy_has_move = true;
 
 void enemy_move(int i) {
+	int relative_player_x = player_x - enemy_x;
+	int relative_player_y = player_y - enemy_y;
+
+	int absolute_relative_player_x = abs(relative_player_x);
+	int absolute_relative_player_y = abs(relative_player_y);
+
+	if(
+			absolute_relative_player_x <= 2 &&
+			absolute_relative_player_y <= 1
+		) {
+		if(player_health == 0) return;
+
+		player_health -= 1;
+		return;
+	}
+
+
+
 	if(!enemy_has_move) {
 		enemy_has_move = true;
 		return;
 	}
 	enemy_has_move = false;
 
-	int relative_player_x = player_x - enemy_x;
-	int relative_player_y = player_y - enemy_y;
-
-	int absolute_relative_player_x = abs(relative_player_x);
-	int absolute_relative_player_y = abs(relative_player_y);
+	int going_to_be;
 	if(absolute_relative_player_x > absolute_relative_player_y) {
 		// x axis
 		if(relative_player_x * 2 < 0) {
-			enemy_x -= ENEMY_STEP_X;
+			going_to_be = enemy_x - ENEMY_STEP_X;
+			if(going_to_be < 0 || map_cant_move(enemy_y, going_to_be)) {
+				goto skip_past;
+			}
 		} else {
-			enemy_x += ENEMY_STEP_X;
+			going_to_be = enemy_x + ENEMY_STEP_X;
+			if(going_to_be > MAP_WIDTH || map_cant_move(enemy_y, going_to_be)) {
+				goto skip_past;
+			}
 		}
+		enemy_x = going_to_be;
 	} else {
+skip_past:
 		// y axis
 		if(relative_player_y < 0) {
-			enemy_y -= ENEMY_STEP_Y;
+			going_to_be = enemy_y - ENEMY_STEP_Y;
+			if(going_to_be < 0 || map_cant_move(going_to_be, enemy_x) || map_cant_move(going_to_be, enemy_x+1)) {
+				return;
+			}
 		} else {
-			enemy_y += ENEMY_STEP_Y;
+			going_to_be = enemy_y + ENEMY_STEP_Y;
+			if(going_to_be > MAP_HEIGHT || map_cant_move(going_to_be, enemy_x) || map_cant_move(going_to_be, enemy_x+1)) {
+				return;
+			}
 		}
+		enemy_y = going_to_be;
 	}
 }
 

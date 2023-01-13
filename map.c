@@ -8,6 +8,11 @@
 
 #include "player.h"
 
+#define token_paste(x, y) x##y
+
+#define map_color_generate(base) init_pair(token_paste(base, _PAIR), token_paste(base, _COLOR), token_paste(base, _COLOR))
+
+
 WINDOW *map_window;
 
 void map_draw(int offset_y, int offset_x) {
@@ -68,6 +73,8 @@ void map_init() {
 	map_color_generate(MAP_TILE_WATER);
 	map_color_generate(MAP_TILE_MOUNTAIN);
 	map_color_generate(MAP_TILE_ENEMY);
+	map_color_generate(MAP_COLOR_HEALTHBAR_RED);
+	map_color_generate(MAP_COLOR_HEALTHBAR_BLACK);
 }
 
 

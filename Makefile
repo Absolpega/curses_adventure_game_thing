@@ -6,7 +6,7 @@ LIBRARY_FLAGS = -lncurses
 
 BINARY = binary
 
-SOURCE = main.c draw.c map.c player.c save.c enemy.c
+SOURCE = main.c draw.c map.c player.c save.c enemy.c ui.c
 
 all: $(SOURCE)
 	$(COMPILER) $(COMPILER_FLAGS) -o $(BINARY) $(SOURCE) $(LIBRARY_FLAGS)

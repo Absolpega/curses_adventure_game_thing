@@ -14,6 +14,8 @@
 
 #include "enemy.h"
 
+#include "ui.h"
+
 void end_game(const char *message, bool error) {
 	endwin();
 
@@ -43,12 +45,14 @@ int main(int argc, char *argv[]) {
 	curs_set(0);
 
 	map_init();
+	ui_player_health_init();
 
 	wnoutrefresh(stdscr);
 
 	while(true) {
 		map_camera_draw();
 		enemy_turn();
+		ui_draw();
 		player_update();
 	}
 

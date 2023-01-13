@@ -6,6 +6,8 @@
 extern int player_y;
 extern int player_x;
 
+extern int player_health;
+
 extern WINDOW *debug_window;
 
 void player_update();

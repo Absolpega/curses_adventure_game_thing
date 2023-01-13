@@ -3,11 +3,6 @@
 
 #include <ncurses.h>
 
-
-#define token_paste(x, y) x##y
-
-#define map_color_generate(base) init_extended_pair(token_paste(base, _PAIR), token_paste(base, _COLOR), token_paste(base, _COLOR))
-
 #define screen_width getmaxx(stdscr)
 #define screen_height getmaxy(stdscr)
 
@@ -32,13 +27,21 @@
 #define MAP_TILE_ENEMY_PAIR 5
 #define MAP_TILE_ENEMY_CHARACTER 'e'
 
+#define MAP_COLOR_HEALTHBAR_RED_COLOR COLOR_RED
+#define MAP_COLOR_HEALTHBAR_RED_PAIR 6
+#define MAP_COLOR_HEALTHBAR_RED_CHARACTER ' '
+
+#define MAP_COLOR_HEALTHBAR_BLACK_COLOR COLOR_BLACK
+#define MAP_COLOR_HEALTHBAR_BLACK_PAIR 7
+#define MAP_COLOR_HEALTHBAR_BLACK_CHARACTER ' '
+
 
 #define MAP_HEIGHT 300
 #define MAP_WIDTH 600
 
 
 #define MAP_COUNT_EACH 6
-#define MAP_COUNT 3
+#define MAP_COUNT 2
 
 static const int MAP_MAP[MAP_COUNT][MAP_COUNT_EACH] = {
 	{
@@ -56,14 +59,6 @@ static const int MAP_MAP[MAP_COUNT][MAP_COUNT_EACH] = {
 		40,
 		MAP_TILE_MOUNTAIN_CHARACTER,
 		MAP_TILE_MOUNTAIN_PAIR,
-	},
-	{
-		5,
-		10,
-		5,
-		10,
-		MAP_TILE_ENEMY_CHARACTER,
-		MAP_TILE_ENEMY_PAIR,
 	},
 };
 
