@@ -9,13 +9,26 @@
 
 #include "player.h"
 
-#define enemy_x enemy_map[i][1]
-#define enemy_y enemy_map[i][0]
+#define enemy_y						enemy_map[i][0]
+#define enemy_x						enemy_map[i][1]
+#define enemy_has_move				enemy_map[i][2]
+#define enemy_player_behind_wall	enemy_map[i][3]
+
+#define ENEMY_COUNT_EACH 4
+#define ENEMY_COUNT 2
 
 int enemy_map[ENEMY_COUNT][ENEMY_COUNT_EACH] = {
 	{
 		20, // y
 		10, // x
+		true, // has move
+		false, // player behind wall
+	},
+	{
+		10, // y
+		10, // x
+		false, // has move
+		false, // player behind wall
 	},
 };
 
@@ -53,8 +66,6 @@ void enemy_camera_draw(int i) {
 #define ENEMY_STEP_X 2
 #define ENEMY_STEP_Y 1
 
-bool enemy_has_move = true;
-
 void enemy_move(int i) {
 	int relative_player_x = player_x - enemy_x;
 	int relative_player_y = player_y - enemy_y;
@@ -80,36 +91,91 @@ void enemy_move(int i) {
 	}
 	enemy_has_move = false;
 
-	int going_to_be;
+
+	//bool cant_go_up		= false;
+	//bool cant_go_down	= false;
+	//bool cant_go_right	= false;
+	//bool cant_go_left	= false;
+
+	int going_to_be_up		= 0;
+	int going_to_be_down	= 0;
+	int going_to_be_left	= 0;
+	int going_to_be_right	= 0;
+
+	bool go_preference_up		= 0;
+	bool go_preference_down		= 0;
+	bool go_preference_left		= 0;
+	bool go_preference_right	= 0;
+
+	
+	{
+		// left
+		going_to_be_left = enemy_x - ENEMY_STEP_X;
+
+		go_preference_left = 1;
+
+		if(going_to_be_left < 0 || map_cant_move(enemy_y, going_to_be_left)) {
+			go_preference_left = 0;
+		}
+	}
+	{
+		// right
+		going_to_be_right = enemy_x + ENEMY_STEP_X;
+
+		go_preference_right = 1;
+
+		if(going_to_be_right > MAP_WIDTH || map_cant_move(enemy_y, going_to_be_right)) {
+			go_preference_right = 0;
+		}
+	}
+
+	{
+		// up
+		going_to_be_up = enemy_y - ENEMY_STEP_Y;
+
+		go_preference_up = 1;
+
+		if(going_to_be_up < 0 || map_cant_move(going_to_be_up, enemy_x) || map_cant_move(going_to_be_up, enemy_x+1)) {
+			go_preference_up = 0;
+		}
+	}
+	{
+		// down
+		going_to_be_down = enemy_y + ENEMY_STEP_Y;
+
+		go_preference_down = 1;
+
+		if(going_to_be_down > MAP_HEIGHT || map_cant_move(going_to_be_down, enemy_x) || map_cant_move(going_to_be_down, enemy_x+1)) {
+			go_preference_down = 0;
+		}
+	}
+	
 	if(absolute_relative_player_x > absolute_relative_player_y) {
 		// x axis
 		if(relative_player_x * 2 < 0) {
-			going_to_be = enemy_x - ENEMY_STEP_X;
-			if(going_to_be < 0 || map_cant_move(enemy_y, going_to_be)) {
-				goto skip_past;
-			}
+			// left
+			if(go_preference_left == 0)
+				return;
+			enemy_x = going_to_be_left;
 		} else {
-			going_to_be = enemy_x + ENEMY_STEP_X;
-			if(going_to_be > MAP_WIDTH || map_cant_move(enemy_y, going_to_be)) {
-				goto skip_past;
-			}
+			// right
+			if(go_preference_right == 0)
+				return;
+			enemy_x = going_to_be_right;
 		}
-		enemy_x = going_to_be;
 	} else {
-skip_past:
 		// y axis
 		if(relative_player_y < 0) {
-			going_to_be = enemy_y - ENEMY_STEP_Y;
-			if(going_to_be < 0 || map_cant_move(going_to_be, enemy_x) || map_cant_move(going_to_be, enemy_x+1)) {
+			// up
+			if(go_preference_up == 0)
 				return;
-			}
+			enemy_y = going_to_be_up;
 		} else {
-			going_to_be = enemy_y + ENEMY_STEP_Y;
-			if(going_to_be > MAP_HEIGHT || map_cant_move(going_to_be, enemy_x) || map_cant_move(going_to_be, enemy_x+1)) {
+			// down
+			if(go_preference_down == 0)
 				return;
-			}
+			enemy_y = going_to_be_down;
 		}
-		enemy_y = going_to_be;
 	}
 }
 

@@ -1,4 +1,10 @@
 #!/usr/bin/env sh
 
-touch save.txt
+if cat save.txt > /dev/null; then
+	echo "save file exists"
+else
+	echo "save file doesn't exist"
+	echo "0 0 10" > save.txt
+fi
+
 ./binary $(cat save.txt) > save.txt

@@ -62,11 +62,12 @@ static const int MAP_MAP[MAP_COUNT][MAP_COUNT_EACH] = {
 	},
 };
 
-#define MAP_COLLIDERS_COUNT 2
+#define MAP_COLLIDERS_COUNT 3
 
 static const char MAP_COLLIDERS[MAP_COLLIDERS_COUNT] = {
 	'w',
 	'm',
+	'e',
 };
 
 bool map_cant_move(int y, int x);
